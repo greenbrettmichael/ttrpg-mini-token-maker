@@ -2,6 +2,7 @@
 import random
 import requests
 import os
+import io
 import shutil
 from time import sleep
 from bs4 import BeautifulSoup
@@ -24,11 +25,6 @@ def print_request_error(page):
 
 def generate_user_agent_header():
     headers = requests.utils.default_headers()
-    headers.update(
-    {
-        'User-Agent': UserAgent().new_ua,
-    }
-    )
     return headers
 
 def tag_visible(element):
@@ -43,11 +39,11 @@ def aiedd_monster_crawl(output_folder):
         monster_table_page = requests.get("https://www.aidedd.org/dnd-filters/monsters.php", headers=generate_user_agent_header(), timeout=5)
         if monster_table_page.status_code != requests.codes.ok:
             print_request_error(monster_table_page)
+            return
         monster_table_parser = BeautifulSoup(monster_table_page.content, 'html.parser')
         monster_table_page_links = monster_table_parser.select("td a")
         random.shuffle(monster_table_page_links)
         for link_tag in monster_table_page_links:
-            sleep(random.uniform(.5, 1.5)) # be nice and don't CDoS
             monster_link_href = link_tag.get("href")
             monster_name_param_split = monster_link_href.rsplit('vo=', 1)
             if len(monster_name_param_split) != 2:
@@ -56,16 +52,16 @@ def aiedd_monster_crawl(output_folder):
             monster_folder = output_folder + "/" + monster_name
             if os.path.exists(monster_folder):
                 continue
-            os.makedirs(monster_folder)
             try:
+                sleep(random.uniform(10, 60)) # be nice and don't CDoS
                 monster_page = requests.get(monster_link_href, headers=generate_user_agent_header(), timeout=5)
                 if monster_page.status_code != requests.codes.ok:
                     print_request_error(monster_page)
-                    continue
+                    return
+                os.makedirs(monster_folder)
                 monster_page_parser = BeautifulSoup(monster_page.content, 'html.parser')
-                monster_html_file = open(monster_folder + "/description.html","w")
-                monster_html_file.write(monster_page_parser.prettify(formatter="html"))
-                monster_html_file.close()
+                with io.open(monster_folder + "/description.html", "w", encoding="utf-8") as monster_html_file:
+                    monster_html_file.write(monster_page_parser.prettify(formatter="html"))
                 monster_image_list = monster_page_parser.select("div.picture img, div.picture amp-img")
                 if len(monster_image_list) > 1:
                     print("too many images, saving first")
