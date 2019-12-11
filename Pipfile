@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 beautifulsoup4 = "*"
 requests = "*"
+google-images-download = "*"
 
 [requires]
 python_version = "3.8"

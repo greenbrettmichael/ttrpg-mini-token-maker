@@ -7,6 +7,7 @@ import shutil
 from time import sleep
 from bs4 import BeautifulSoup
 from bs4.element import Comment
+from google_images_download import google_images_download 
 
 class UserAgent:
     ua_source_url='https://deviceatlas.com/blog/list-of-user-agent-strings#desktop'
@@ -82,11 +83,12 @@ def aiedd_monster_crawl(output_folder):
                 print(monster_link_href + " timed out")
     except requests.Timeout as e:
         print("https://www.aidedd.org/dnd-filters/monsters.php timed out")
-        
-        
 
-        
+def google_image_token_get(monster_name, monster_dir):
+    search_query = "dnd " + monster_name + " token"
+    response = google_images_download.googleimagesdownload()
+    arguments = {"keywords":search_query,"output_directory":monster_dir,"image_directory":monster_name,"single_image":True, "limit":1,"print_urls":False}   #creating list of arguments
+    paths = response.download(arguments)
 
-
-aiedd_monster_crawl("../monsters")
+google_image_token_get("giant owl", "../monster")
 
