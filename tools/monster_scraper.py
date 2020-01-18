@@ -89,6 +89,3 @@ def google_image_token_get(monster_name, monster_dir):
     response = google_images_download.googleimagesdownload()
     arguments = {"keywords":search_query,"output_directory":monster_dir,"image_directory":monster_name,"single_image":True, "limit":1,"print_urls":False}   #creating list of arguments
     paths = response.download(arguments)
-
-google_image_token_get("giant owl", "../monster")
-
