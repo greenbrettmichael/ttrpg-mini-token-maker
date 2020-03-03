@@ -8,12 +8,16 @@
 </head>
 
 <body>
-
-    <h1>TTRPG MINI TOKEN MAKER</h1>
-
-    <input id="fileUpload" type="file" multiple>Upload monster images here!</input>
-    <ul id="imageList"></ul>
-
+    <main>
+        <h1>TTRPG MINI TOKEN MAKER</h1>
+        <div style="display: flex;justify-content: space-between;">
+                <p>Upload images for tokens!</p>
+                <input id="fileUpload" type="file" accept="image/*" style="display: none;" multiple/>
+                <input type="button" value="Browse..." onclick="document.getElementById('fileUpload').click();" />
+        </div>
+        
+        <ul id="imageList"></ul>
+    </main>
     <script src="src/index.js" type="module"></script>
 </body>
 
