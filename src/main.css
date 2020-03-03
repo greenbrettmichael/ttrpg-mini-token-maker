@@ -65,31 +65,21 @@ body {
   }
 
   ul {
-    display: table;
-    align-content: center;
-    width: 100%;
-    border-collapse:separate; 
-    border-spacing:0 .5rem; 
+    display: flex;
+    flex-direction: column;
     padding: 0px;
+    list-style-type: none;
   }
 
   li {
-    display: table-row;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
     background-color: var(--color-light);
     color: var(--color-dark);
     border-radius: 0.5rem;
     font-size: 1.125rem;
     border:.1rem solid black;
-  }
-
-  li > label {
-      display: block;
-      float: left;
-  }
-
-  li > img {
-      display: block;
-      float: right;
   }
 
   input,
