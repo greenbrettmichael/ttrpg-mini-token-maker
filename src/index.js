@@ -39,4 +39,5 @@ function loadImages() {
 
 window.addEventListener('load', function () {
     document.querySelector('#fileUpload').addEventListener('change', loadImages);
+   // document.querySelector('#convert').addEventListener('click', )
 });
