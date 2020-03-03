@@ -1,0 +1,12 @@
+#dropzone {
+    background-color: #cfc;
+    border: solid 3px #9c9;
+    color: #9c9;
+    min-height: 50px;
+    padding: 20px;
+    text-shadow: 1px 1px 0 #fff;
+}
+#items:empty::before {
+    color: #ccc;
+    content:"(File counts will be shown here.)";
+}
