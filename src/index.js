@@ -1,15 +1,20 @@
-import * as uploader from './upload.js'
+function addImage() {
+    let imageList = document.getElementById('imageList');
+    let imageFile = document.createElement("li");
+    imageFile.appendChild(this);
+    imageFile.appendChild(document.createTextNode(this.alt))
+    imageList.appendChild(imageFile);
+}
 
-var elDrop = document.getElementById('dropzone');
-var elItems = document.getElementById('images');
+function loadImages() {
+    [...this.files].map(file => {
+        let img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.onload = addImage;
+    });
+}
 
-elDrop.addEventListener('dragover', function (event) {
-    event.preventDefault();
-    elItems.innerHTML = 0;
-});
-
-elDrop.addEventListener('drop', async function (event) {
-    event.preventDefault();
-    let items = await uploader.getAllFileEntries(event.dataTransfer.items);
-    elItems.innerHTML = items.length;
+window.addEventListener('load', function () {
+    document.querySelector('#fileUpload').addEventListener('change', loadImages);
 });
