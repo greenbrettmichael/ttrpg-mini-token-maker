@@ -4,26 +4,25 @@
 <head>
     <title>TTRPG MINI TOKEN MAKER</title>
     <link rel="stylesheet" href="src/main.css">
+    <script src="src/jspdf.min.js"></script>
     <link rel="icon" type="image/png" href="src/favicon.ico">
 </head>
 
 <body>
     <main>
         <h1>TTRPG MINI TOKEN MAKER</h1>
-        <div style="display: flex;justify-content: space-between;">
-                <p>Upload images for tokens!</p>
-                <input id="fileUpload" type="file" accept="image/*" style="display: none;" multiple/>
-                <input type="button" value="Browse..." onclick="document.getElementById('fileUpload').click();" />
-                <input id="convert" type="button"/>
+        <div class="row">
+            <label for="count">Count:</label>
+            <input id="count" type="number"/>
+            <label for="sizer">Size (in):</label>
+            <input id="sizer" type="number" step="0.01" min="0.5" max="3.5"/>
+            <label for="circle">Circle:</label>
+            <input type="checkbox" id="circle"/>
+            <input id="fileUpload" type="file" accept="image/*" style="display: none;" multiple />
+            <input type="button" value="Convert Images" onclick="document.getElementById('fileUpload').click();" />
         </div>
-
-        
-        <ul id="imageList"></ul>
     </main>
-    <div class="modal">
-            <iframe src="src/token-generator-form.html" class="modal-content"></iframe>
-        </div>
-    <script src="src/index.js" type="module"></script>
+    <script src="src/index.js"></script>
 </body>
 
 </html>
