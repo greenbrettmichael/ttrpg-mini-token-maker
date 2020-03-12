@@ -1,3 +1,5 @@
+import * as pdfGen from './doc.js'
+
 function scaleImage(img, width, height) {
     let canvas = document.createElement("canvas");
     let ctx = canvas.getContext("2d");
@@ -27,21 +29,17 @@ function loadImage(file) {
     });
 }
 
-async function loadImages(uploader, doc) {
-    imgLoaders = [...uploader.files].map(file => {
+async function loadImages() {
+    let doc = new pdfGen.Doc(1.5);
+    let imgLoaders = [...this.files].map(file => {
         return loadImage(file).then(img => {
-            doc.addImage(img.src, 'jpeg', 0, 0);
+            doc.addImage(img.src);
         });
     });
     await Promise.all(imgLoaders);
     doc.save('tokens.pdf');
 }
 
-function createPDF() {
-    let doc = new jsPDF('p', 'mm')
-    loadImages(this, doc);
-}
-
 window.addEventListener('load', function () {
-    document.querySelector('#fileUpload').addEventListener('change', createPDF);
+    document.querySelector('#fileUpload').addEventListener('change', loadImages);
 });
