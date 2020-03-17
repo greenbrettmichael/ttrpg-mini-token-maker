@@ -32,8 +32,4 @@ class Doc {
     }
 }
 
-function pxToIn(px) {
-    return px / 96;
-}
-
-export { Doc, pxToIn }
+export { Doc, pxToIn, InToPx }
