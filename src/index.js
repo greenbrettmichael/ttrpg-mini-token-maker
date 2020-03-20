@@ -8,25 +8,16 @@ function InToPx(In) {
     return In * 96;
 }
 
-function modifyImage(img, width, height, isCircle) {
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext("2d");
-    canvas.height = height;
-    canvas.width = width;
-    
-    ctx.beginPath();
-    ctx.arc(25, 25, 25, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.clip();
-    ctx.drawImage(img, 0, 0,  img.width, img.height, 0,0, width, height);
-    ctx.beginPath();
-    ctx.arc(0, 0, 25, 0, Math.PI * 2, true);
-    ctx.clip();
-    ctx.closePath();
+async function modifyImage(img, fr) {
+    img.src = fr.result;
     let token = document.createElement('img');
-    token.src = canvas.toDataURL("image/jpeg");
+    document.body.appendChild(img); // TODO div this into hidden so it does not show
+    const canvas = await html2canvas(img);
+    token.src = canvas.toDataURL("image/png");
+    console.log(token.src);
     token.name = img.name;
     token.alt = img.alt;
+    document.body.appendChild(token);
     return token;
 }
 
@@ -35,9 +26,12 @@ function loadImage(file, width, height, isCircle) {
         let img = document.createElement('img');
         img.name = file.name;
         img.alt = file.name;
-        img.onload = () => resolve(modifyImage(img,width, height, isCircle));
-        img.onerror = reject;
-        img.src = URL.createObjectURL(file);
+        img.width = 512;
+        img.height = 512;
+        var fr = new FileReader();
+        fr.onload = () => resolve(modifyImage(img, fr));
+        fr.onerror = reject;
+        fr.readAsDataURL(file);
     });
 }
 
@@ -48,7 +42,7 @@ async function loadImages() {
     let doc = new pdfGen.Doc(tokenSize);
     let imgLoaders = [...this.files].map(file => {
         return loadImage(file, isCircle).then(img => {
-            for (i = 0; i < count; ++i) {
+            for (let i = 0; i < count; ++i) {
                 doc.addImage(img.src);
             }
         });

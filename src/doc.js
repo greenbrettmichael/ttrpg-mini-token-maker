@@ -32,4 +32,4 @@ class Doc {
     }
 }
 
-export { Doc, pxToIn, InToPx }
+export { Doc }
