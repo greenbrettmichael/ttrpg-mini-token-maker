@@ -12,11 +12,11 @@ async function modifyImage(img, fr) {
     img.src = fr.result;
     let token = document.createElement('img');
     let hiddenImage = document.createElement('div');
+    hiddenImage.style.opacity = "0%";
     hiddenImage.appendChild(img);
     document.body.appendChild(hiddenImage);
     const canvas = await html2canvas(img);
     token.src = canvas.toDataURL("image/png");
-    console.log(token.src);
     token.name = img.name;
     token.alt = img.alt;
     document.body.removeChild(hiddenImage);
