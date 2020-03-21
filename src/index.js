@@ -11,13 +11,15 @@ function InToPx(In) {
 async function modifyImage(img, fr) {
     img.src = fr.result;
     let token = document.createElement('img');
-    document.body.appendChild(img); // TODO div this into hidden so it does not show
+    let hiddenImage = document.createElement('div');
+    hiddenImage.appendChild(img);
+    document.body.appendChild(hiddenImage);
     const canvas = await html2canvas(img);
     token.src = canvas.toDataURL("image/png");
     console.log(token.src);
     token.name = img.name;
     token.alt = img.alt;
-    document.body.appendChild(token);
+    document.body.removeChild(hiddenImage);
     return token;
 }
 
