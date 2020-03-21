@@ -26,8 +26,11 @@ function loadImage(file, width, height, isCircle) {
         let img = document.createElement('img');
         img.name = file.name;
         img.alt = file.name;
-        img.width = 512;
-        img.height = 512;
+        img.width = width;
+        img.height = height;
+        if(isCircle) {
+            img.style.borderRadius = "50%";
+        }
         var fr = new FileReader();
         fr.onload = () => resolve(modifyImage(img, fr));
         fr.onerror = reject;
@@ -39,9 +42,11 @@ async function loadImages() {
     const count = document.querySelector('#count').value;
     const tokenSize = document.querySelector('#sizer').value;
     const isCircle = document.querySelector('#circle').value == "on";
+    const tokenWidth = InToPx(tokenSize);
+    const tokenHeight = tokenWidth;
     let doc = new pdfGen.Doc(tokenSize);
     let imgLoaders = [...this.files].map(file => {
-        return loadImage(file, isCircle).then(img => {
+        return loadImage(file, tokenWidth, tokenHeight, isCircle).then(img => {
             for (let i = 0; i < count; ++i) {
                 doc.addImage(img.src);
             }
