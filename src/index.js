@@ -8,14 +8,25 @@ function InToPx(In) {
     return In * 96;
 }
 
-async function modifyImage(img, fr) {
+async function modifyImage(img, fr, width, height) {
     img.src = fr.result;
     let token = document.createElement('img');
     let hiddenImage = document.createElement('div');
     hiddenImage.style.opacity = "0%";
     hiddenImage.appendChild(img);
     document.body.appendChild(hiddenImage);
-    const canvas = await html2canvas(img);
+    let canvas = await html2canvas(img);
+    let ctx = canvas.getContext("2d");
+    let tempCanvas=document.createElement("canvas");
+    let tctx=tempCanvas.getContext("2d");
+    const cw = canvas.width;
+    const ch = canvas.height;
+    tempCanvas.width = cw;
+    tempCanvas.height = ch;
+    tctx.drawImage(canvas,0,0);
+    canvas.width = width;
+    canvas.height = height;
+    ctx.drawImage(tempCanvas,0,0,cw,ch,0,0,width,height);
     token.src = canvas.toDataURL("image/png");
     token.name = img.name;
     token.alt = img.alt;
@@ -28,13 +39,11 @@ function loadImage(file, width, height, isCircle) {
         let img = document.createElement('img');
         img.name = file.name;
         img.alt = file.name;
-        img.width = width;
-        img.height = height;
         if(isCircle) {
             img.style.borderRadius = "50%";
         }
         var fr = new FileReader();
-        fr.onload = () => resolve(modifyImage(img, fr));
+        fr.onload = () => resolve(modifyImage(img, fr, width, height));
         fr.onerror = reject;
         fr.readAsDataURL(file);
     });
