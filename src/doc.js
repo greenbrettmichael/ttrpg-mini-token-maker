@@ -1,6 +1,6 @@
 class Doc {
-    #a5Width = 5.83;
-    #a5Height = 8.27;
+    #a4Width = 8.27;
+    #a4Height = 11.69;
     #wIters;
     #hIters;
     #wIter = 0;
@@ -8,8 +8,8 @@ class Doc {
     #pdf = new jsPDF('p', 'in');;
     constructor(tokenSize) {
         this.tokenSize = tokenSize;
-        this.#wIters = Math.floor(this.#a5Width / this.tokenSize);
-        this.#hIters = Math.floor(this.#a5Height / this.tokenSize);
+        this.#wIters = Math.floor(this.#a4Width / this.tokenSize);
+        this.#hIters = Math.floor(this.#a4Height / this.tokenSize);
     }
 
     addImage(src) {
