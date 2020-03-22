@@ -8,42 +8,44 @@ function InToPx(In) {
     return In * 96;
 }
 
-async function modifyImage(img, fr, width, height) {
+async function imgWCSSToCanvas(img, fr) {
     img.src = fr.result;
-    let token = document.createElement('img');
     let hiddenImage = document.createElement('div');
     hiddenImage.style.opacity = "0%";
     hiddenImage.appendChild(img);
     document.body.appendChild(hiddenImage);
     let canvas = await html2canvas(img);
-    let ctx = canvas.getContext("2d");
-    let tempCanvas=document.createElement("canvas");
-    let tctx=tempCanvas.getContext("2d");
-    const cw = canvas.width;
-    const ch = canvas.height;
-    tempCanvas.width = cw;
-    tempCanvas.height = ch;
-    tctx.drawImage(canvas,0,0);
-    canvas.width = width;
-    canvas.height = height;
-    ctx.drawImage(tempCanvas,0,0,cw,ch,0,0,width,height);
-    token.src = canvas.toDataURL("image/png");
-    token.name = img.name;
-    token.alt = img.alt;
     document.body.removeChild(hiddenImage);
-    return token;
+    return canvas;
 }
 
-function loadImage(file, width, height, isCircle) {
+function canvasToTokenImg(canvas, number) {
+    let tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    let ctx = tempCanvas.getContext('2d');
+    ctx.drawImage(canvas, 0, 0);
+    ctx.font = "30px Comic Sans MS";
+    ctx.fillStyle = "red";
+    ctx.textAlign = "center";
+    ctx.fillText(number, tempCanvas.width/2, 25);
+    return tempCanvas.toDataURL("image/png");
+}
+
+
+
+function loadImageToCanvas(file, width, height, isCircle) {
     return new Promise((resolve, reject) => {
         let img = document.createElement('img');
         img.name = file.name;
         img.alt = file.name;
+        img.width = width;
+        img.height = height;
         if(isCircle) {
             img.style.borderRadius = "50%";
         }
         var fr = new FileReader();
-        fr.onload = () => resolve(modifyImage(img, fr, width, height));
+        fr.onload = () => resolve(imgWCSSToCanvas(img, fr, width, height));
         fr.onerror = reject;
         fr.readAsDataURL(file);
     });
@@ -52,14 +54,14 @@ function loadImage(file, width, height, isCircle) {
 async function loadImages() {
     const count = document.querySelector('#count').value;
     const tokenSize = document.querySelector('#sizer').value;
-    const isCircle = document.querySelector('#circle').value == "on";
+    const isCircle = document.querySelector('#circle').checked;
     const tokenWidth = InToPx(tokenSize);
     const tokenHeight = tokenWidth;
     let doc = new pdfGen.Doc(tokenSize);
     let imgLoaders = [...this.files].map(file => {
-        return loadImage(file, tokenWidth, tokenHeight, isCircle).then(img => {
+        return loadImageToCanvas(file, tokenWidth, tokenHeight, isCircle).then(imgCanvas => {
             for (let i = 0; i < count; ++i) {
-                doc.addImage(img.src);
+                doc.addImage(canvasToTokenImg(imgCanvas, i + 1));
             }
         });
     });
