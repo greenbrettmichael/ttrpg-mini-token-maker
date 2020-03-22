@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TTRPG MINI TOKEN MAKER</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" type="image/png" href="favicon.ico">
+</head>
+
+<body>
+    <main>
+        <h1>TTRPG MINI TOKEN MAKER</h1>
+        <div style="display: flex;justify-content: space-between;">
+                <p>Upload images for tokens!</p>
+                <input id="fileUpload" type="file" accept="image/*" style="display: none;" multiple/>
+                <input type="button" value="Browse..." onclick="document.getElementById('fileUpload').click();" />
+                <input id="convert" type="button"/>
+        </div>
+        
+        <ul id="imageList"></ul>
+    </main>
+    <script src="index.js" type="module"></script>
+</body>
+
+</html>
